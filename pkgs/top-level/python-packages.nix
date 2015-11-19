@@ -3365,6 +3365,11 @@ let
       sha256 = "1qf3iiv401vhsdmf4bd08fwb3fq4xq769q2yl7zqqr1iml7w3l2s";
     };
 
+    # no idea what that file is doing there (probably bad release)
+    preCheck = ''
+      rm src/tests/x.py
+    '';
+
     meta = {
       homepage = http://pypi.python.org/pypi/decorator;
       description = "Better living through Python with decorators";
@@ -4102,7 +4107,7 @@ let
     };
   };
 
-  functools32 = buildPythonPackage rec {
+  functools32 = if isPy3k then null else buildPythonPackage rec {
     name = "functools32-${version}";
     version = "3.2.3-2";
 
@@ -10516,7 +10521,6 @@ let
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
-      sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
     inherit (support) preBuild checkPhase;
@@ -10970,12 +10974,13 @@ let
 
   bandit = buildPythonPackage rec {
     name = "bandit-${version}";
-    version = "0.14.1";
-    disabled = isPyPy; # a test fails
+    version = "0.16.1";
+    disabled = isPy33;
+    doCheck = !isPyPy; # a test fails
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/bandit/${name}.tar.gz";
-      sha256 = "1hsc3qn3srzx76zl8z3hg0vjp8m6mk9ylfhhgw5bcwbjz3x82ifl";
+      sha256 = "0qd9kxknac5n5xfl5zjnlmk6jr94krkcx29zgyna8p9lyb828hsk";
     };
 
     propagatedBuildInputs = with self; [ pbr six pyyaml appdirs stevedore ];
@@ -19696,8 +19701,9 @@ let
       url = "http://pypi.python.org/packages/source/p/pyzmq/${name}.tar.gz";
       sha256 = "1gbpgz4ngfw5x6zlsa1k0jwy5vd5wg9iz1shdx4zav256ib08vjx";
     };
+    setupPyBuildFlags = ["-i"];
     buildInputs = with self; [ pkgs.zeromq3 ];
-    doCheck = false;
+    propagatedBuildInputs = [ self.py ];
   };
 
   tokenserver = buildPythonPackage rec {

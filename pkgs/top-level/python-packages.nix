@@ -10948,10 +10948,7 @@ let
       sed -i 's@python@${python.interpreter}@' os_testr/tests/files/testr-conf
     '';
 
-    # since tests depend on install results, let's do it so
-    doInstallCheck = true;
-    doCheck = false;
-    installCheckPhase = ''
+    checkPhase = ''
       export PATH=$PATH:$out/bin
       ${python.interpreter} setup.py test
     '';
@@ -11520,9 +11517,7 @@ let
       sha256 = "1nw827iz5g9jlfnfbdi8kva565v0kdjzba2lccziimj09r71w900";
     };
 
-    doInstallCheck = true;
-    doCheck = false;
-    installCheckPhase = ''
+    checkPhase = ''
       # remove turbogears tests as we don't have it packaged
       rm tests/test_tg*
       # remove flask since we don't have flask-restful
@@ -11564,9 +11559,7 @@ let
       rm taskflow/tests/unit/test_engines.py
     '';
 
-    doInstallCheck = true;
-    doCheck = false;
-    installCheckPhase = ''
+    checkPhase = ''
       sed -i '/doc8/d' test-requirements.txt
       ${python.interpreter} setup.py test
     '';
@@ -15958,9 +15951,7 @@ let
       sha256 = "05qf0m32isflln1zjgxlpw0wf469lj86vdwwqyizp1h94x5l22ji";
     };
 
-    doInstallCheck = true;
-    doCheck = false;
-    installCheckPhase = ''
+    checkPhase = ''
       # this test takes too long
       sed -i 's/test_big_file/noop/' test/test_sendfile.py
       ${self.python.executable} test/test_sendfile.py
@@ -16868,9 +16859,7 @@ let
         --replace '/usr/' '${pkgs.bash}/'
     '';
 
-    doInstallCheck = !isPyPy;
-    doCheck = false;
-    installCheckPhase = ''
+    checkPhase = ''
       python test_subprocess32.py
     '';
 
@@ -17109,9 +17098,7 @@ let
     buildInputs = with self; [ unittest2 scripttest pytz pkgs.pylint tempest-lib mock testtools ];
     propagatedBuildInputs = with self; [ pbr tempita decorator sqlalchemy_1_0 six sqlparse ];
 
-    doInstallCheck = true;
-    doCheck = false;
-    installCheckPhase = ''
+    checkPhase = ''
       export PATH=$PATH:$out/bin
       echo sqlite:///__tmp__ > test_db.cfg
       # depends on ibm_db_sa

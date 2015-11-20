@@ -5035,7 +5035,7 @@ let
 
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
-    inherit (pythonPackages) python boto setuptools distutils-cfg wrapPython;
+    inherit (pythonPackages) python boto setuptools wrapPython;
     pythonProtobuf = pythonPackages.protobuf2_5;
     perf = linuxPackages.perf;
   };
@@ -5404,7 +5404,7 @@ let
   };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
-    inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate;
+    inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate_0_7;
     dateutil = pythonPackages.dateutil_1_5;
   };
 
@@ -5682,7 +5682,7 @@ let
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
-  jenkins-job-builder = callPackage ../development/tools/continuous-integration/jenkins-job-builder { };
+  jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
@@ -9388,7 +9388,7 @@ let
 
   pyMAILt = builderDefsPackage (callPackage ../servers/xmpp/pyMAILt) {};
 
-  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { 
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
     boost = boost155;
   };
 
@@ -12044,9 +12044,7 @@ let
 
   joe = callPackage ../applications/editors/joe { };
 
-  jbrout = callPackage ../applications/graphics/jbrout {
-    inherit (pythonPackages) lxml;
-  };
+  jbrout = callPackage ../applications/graphics/jbrout { };
 
   jumanji = callPackage ../applications/networking/browsers/jumanji {
     webkitgtk = webkitgtk24x;
@@ -13052,7 +13050,7 @@ let
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp sqlite3 darcsver setuptoolsTrial setuptoolsDarcs
-      numpy pyasn1 mock;
+      numpy pyasn1 mock zope_interface;
   };
 
   tailor = builderDefsPackage (callPackage ../applications/version-management/tailor) {};
